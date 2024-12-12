@@ -57,7 +57,7 @@
         }
 
         function checkInput(input) {
-            if (input.length !== 4) {
+            if (input.length < 4 || input.length > 4) {
                 alert("請準確輸入4位數字。");
                 return false;
             }
@@ -112,7 +112,7 @@
 <body>
     <h1>113306042_HW6_1A2B</h1>
     <div id="game-area">
-        <input type="text" id="guess" maxlength="4" placeholder="請輸入4個不重複的數字">
+        <input type="text" id="guess" placeholder="請輸入4個不重複的數字">
         <button id="submit-btn" onclick="submitGuess()">猜!</button>
     </div>
     <div id="log">
