@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1A2B Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f9f9f9;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        #game-area {
+            margin-top: 20px;
+        }
+        input {
+            padding: 5px;
+            font-size: 16px;
+        }
+        button {
+            padding: 5px 10px;
+            font-size: 16px;
+            margin-left: 10px;
+        }
+        #log {
+            margin-top: 20px;
+            text-align: left;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            background: #fff;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        #log div {
+            margin-bottom: 10px;
+        }
+    </style>
+    <script>
+        let answer = generateAnswer();
+        let attempts = 0;
+
+        function generateAnswer() {
+            const digits = [...Array(10).keys()];
+            const answerArray = [];
+            while (answerArray.length < 4) {
+                const randomIndex = Math.floor(Math.random() * digits.length);
+                answerArray.push(digits[randomIndex]);
+                digits.splice(randomIndex, 1);
+            }
+            return answerArray;
+        }
+
+        function checkInput(input) {
+            if (input.length !== 4) {
+                alert("請準確輸入4位數字。");
+                return false;
+            }
+            if (new Set(input).size !== 4) {
+                alert("數字不能重複。");
+                return false;
+            }
+            if (!/^[0-9]+$/.test(input)) {
+                alert("輸入必須僅包含數字。");
+                return false;
+            }
+            return true;
+        }
+
+        function evaluateGuess(guess) {
+            let a = 0, b = 0;
+            guess.forEach((digit, index) => {
+                if (digit === answer[index]) {
+                    a++;
+                } else if (answer.includes(digit)) {
+                    b++;
+                }
+            });
+            return `${a}A${b}B`;
+        }
+
+        function submitGuess() {
+            const inputField = document.getElementById("guess");
+            const guess = inputField.value.split("").map(Number);
+
+            if (!checkInput(inputField.value)) {
+                return;
+            }
+
+            attempts++;
+            const result = evaluateGuess(guess);
+            const log = document.getElementById("log");
+            const entry = document.createElement("div");
+            entry.textContent = `第${attempts}次: ${inputField.value} -> ${result}`;
+            log.appendChild(entry);
+
+            if (result === "4A0B") {
+                alert(`恭喜你猜對了! 總共花 ${attempts} 次猜對。`);
+                inputField.disabled = true;
+                document.getElementById("submit-btn").disabled = true;
+            }
+
+            inputField.value = "";
+        }
+    </script>
+</head>
+<body>
+    <h1>113306042_HW6_1A2B</h1>
+    <div id="game-area">
+        <input type="text" id="guess" maxlength="4" placeholder="請輸入4個不重複的數字">
+        <button id="submit-btn" onclick="submitGuess()">猜!</button>
+    </div>
+    <div id="log">
+        <strong><p>遊戲紀錄:</p></strong>
+    </div>
+</body>
+</html>
